@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -32,6 +33,8 @@ public class Controller {
 	int vertexCount = 0;
 	ArrayList<Circle> vertexList = new ArrayList<>();
 	ArrayList<Edge> edgeList = new ArrayList<>(); 
+	int  clickCount = 0;
+	StackPane stackPane1, stackPane2;
 	
 	public void onGraphPressed(MouseEvent mouseEvent) {
 		if(mouseEvent.isPrimaryButtonDown()) {
@@ -40,31 +43,54 @@ public class Controller {
 	}
 
 	public void addVertex(MouseEvent mouseEvent) {
-		vertexCount++;
-		Circle circle = new Circle();
-		vertexList.add(circle);
-		circle.setFill(Color.ROYALBLUE);
-		circle.setCenterX(mouseEvent.getX());
-		circle.setCenterY(mouseEvent.getY());
-		circle.setRadius(40);
-		Text text = new Text(String.valueOf(vertexCount));
-		text.setFill(Color.WHITE);
-		//text.toFront();
 		
-		StackPane pane = new StackPane();
-		pane.setOnMouseDragged(event -> {
-			if(event.isSecondaryButtonDown()) {
-				pane.setTranslateX(event.getX() + pane.getTranslateX());
-				pane.setTranslateY(event.getY() + pane.getTranslateY());
-			}
-			
-		});
-		pane.setTranslateX(mouseEvent.getX() - 40);
-		pane.setTranslateY(mouseEvent.getY() - 35);
-		FillTransition fillTransition = new FillTransition(Duration.seconds(3), circle, (Color) circle.getFill(), Color.DARKBLUE);
-		fillTransition.play();
-		pane.getChildren().addAll(circle, text);
-		graph.getChildren().add(pane);
+        vertexCount++;
+        Circle circle = new Circle();
+        
+        vertexList.add(circle);
+        
+        circle.setFill(Color.ROYALBLUE);
+        circle.setCenterX(mouseEvent.getX());
+        circle.setCenterY(mouseEvent.getY());
+        circle.setRadius(40);
+        
+        Text text = new Text(String.valueOf(vertexCount));
+        text.setFill(Color.WHITE);
+        //text.toFront();
+        
+        StackPane pane = new StackPane();
+        pane.setTranslateX(mouseEvent.getX() - 40);
+        pane.setTranslateY(mouseEvent.getY() - 35);
+
+        pane.setOnMouseDragged(event -> {
+            if(event.isSecondaryButtonDown()) {
+                pane.setTranslateX(event.getX() + pane.getTranslateX());
+                pane.setTranslateY(event.getY() + pane.getTranslateY());
+            }
+            
+        });
+
+        circle.setOnMousePressed(event -> {
+        	if(event.isControlDown() && event.isSecondaryButtonDown()) {
+        		if(clickCount == 0) {
+        			stackPane1 = (StackPane) circle.getParent();
+        			clickCount = 1;
+        		}
+        		else if(clickCount == 1) {
+        			stackPane2 = (StackPane) circle.getParent();
+        			Edge edge = new Edge(stackPane1, stackPane2, graph);
+        			edgeList.add(edge);
+        			clickCount = 0;
+        		}
+                System.out.println("Number of Edges " + edgeList.size());
+        	}
+        });
+       
+//            FillTransition fillTransition = new FillTransition(Duration.seconds(3), circle, (Color) circle.getFill(), Color.DARKBLUE);
+//            fillTransition.play();
+        pane.getChildren().addAll(circle, text);
+        graph.getChildren().add(pane);
+            
 	}
 	
 	public void addEdge() {
