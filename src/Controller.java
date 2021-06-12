@@ -1,4 +1,7 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Queue;
 
 
 import javafx.animation.FillTransition;
@@ -9,7 +12,6 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -24,17 +26,38 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class Controller {
-	@FXML
-	private AnchorPane graph;
-	@FXML
-	private Button addEdgeButton;
+	@FXML private AnchorPane graph;
+	@FXML private Button addEdgeButton;
+
 	SequentialTransition sequentialTransition;
 	
 	int vertexCount = 0;
-	ArrayList<Circle> vertexList = new ArrayList<>();
-	ArrayList<Edge> edgeList = new ArrayList<>(); 
-	int  clickCount = 0;
+	ArrayList<Circle> vertexList;
+	ArrayList<Edge> edgeList; 
+	// have to clear vertexs
+	Vertex[] vertexs;
+
+	int  clickCount = 0, vertex1ID, vertex2ID;
 	StackPane stackPane1, stackPane2;
+	
+	
+	// graph
+	ArrayList<Integer> adj[];
+	boolean[] discover;
+
+
+	public Controller() {
+		vertexList = new ArrayList<>();
+		edgeList = new ArrayList<>();
+		System.out.println("Constructor");
+		adj = new ArrayList[100];
+		for(int i = 0; i < 100; ++i) { 
+			adj[i] = new ArrayList<>(); 
+		}
+
+		vertexs = new Vertex[100];
+		discover = new boolean[100];
+	}
 	
 	public void onGraphPressed(MouseEvent mouseEvent) {
 		if(mouseEvent.isPrimaryButtonDown()) {
@@ -45,14 +68,14 @@ public class Controller {
 	public void addVertex(MouseEvent mouseEvent) {
 		
         vertexCount++;
-        Circle circle = new Circle();
+        Vertex vertex = new Vertex(mouseEvent, vertexCount, vertexs);
         
-        vertexList.add(circle);
-        
-        circle.setFill(Color.ROYALBLUE);
-        circle.setCenterX(mouseEvent.getX());
-        circle.setCenterY(mouseEvent.getY());
-        circle.setRadius(40);
+        vertexList.add(vertex);
+//        
+//        circle.setFill(Color.ROYALBLUE);
+//        circle.setCenterX(mouseEvent.getX());
+//        circle.setCenterY(mouseEvent.getY());
+//        circle.setRadius(40);
         
         Text text = new Text(String.valueOf(vertexCount));
         text.setFill(Color.WHITE);
@@ -70,17 +93,27 @@ public class Controller {
             
         });
 
-        circle.setOnMousePressed(event -> {
+        vertex.setOnMousePressed(event -> {
         	if(event.isControlDown() && event.isSecondaryButtonDown()) {
         		if(clickCount == 0) {
-        			stackPane1 = (StackPane) circle.getParent();
+        			stackPane1 = (StackPane) vertex.getParent();
         			clickCount = 1;
+        			
+        			vertex1ID = vertex.ID;
+        			System.out.println("BOI " + vertex1ID);
         		}
         		else if(clickCount == 1) {
-        			stackPane2 = (StackPane) circle.getParent();
+        			stackPane2 = (StackPane) vertex.getParent();
         			Edge edge = new Edge(stackPane1, stackPane2, graph);
         			edgeList.add(edge);
         			clickCount = 0;
+        			// this two vertex will have a edge in between
+        			vertex2ID = vertex.ID;
+        			// bi-directional edges
+        			adj[vertex1ID].add(vertex2ID);
+        			adj[vertex2ID].add(vertex1ID);
+        			System.out.println("BOI " + vertex2ID);
+        			
         		}
                 System.out.println("Number of Edges " + edgeList.size());
         	}
@@ -88,7 +121,7 @@ public class Controller {
        
 //            FillTransition fillTransition = new FillTransition(Duration.seconds(3), circle, (Color) circle.getFill(), Color.DARKBLUE);
 //            fillTransition.play();
-        pane.getChildren().addAll(circle, text);
+        pane.getChildren().addAll(vertex, text);
         graph.getChildren().add(pane);
             
 	}
@@ -127,5 +160,34 @@ public class Controller {
 			}
 		}
 		sequentialTransition.play();
+	}
+
+	public void bfs(int root) {
+		Arrays.fill(discover, false);
+
+		discover[root] = true;
+		Queue<Integer> queue = new ArrayDeque<>();
+		queue.add(root);
+		while(!queue.isEmpty()) {
+			int u = queue.poll();
+			for(int v : adj[u]) { 
+				if(discover[v] == false) {
+					queue.add(v);
+					discover[v] = true; 
+				}
+			}
+		}
+	}
+
+	public void clear() {
+		vertexCount = 0;
+		sequentialTransition.getChildren().clear();
+		for(int i = 0; i < 100; ++i) {
+			adj[i].clear();
+			vertexs[i] = null;
+			
+		}
+		vertexList.clear();
+		edgeList.clear();
 	}
 }
