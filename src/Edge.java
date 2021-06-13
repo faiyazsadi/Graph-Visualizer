@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Edge extends Line {
-	public Edge(StackPane spane1, StackPane spane2, AnchorPane graph) {
+	public Edge(StackPane spane1, StackPane spane2, AnchorPane graph, Edge[][] edges, int u, int v) {
 		//getStyleClass().add("Edge");
 //        startXProperty().bind(vertex1.centerXProperty().add(vertex1.translateXProperty()));
 //        startYProperty().bind(vertex1.centerYProperty().add(vertex1.translateYProperty()));
@@ -17,7 +17,8 @@ public class Edge extends Line {
         endYProperty().bind(spane2.translateYProperty().add(35));
         setStrokeWidth(20);
         setStroke(Color.SKYBLUE);
-        System.out.println("We working");
+        edges[u][v] = this;
+        edges[v][u] = this; 
         graph.getChildren().add(this);
         toBack();
 	}
