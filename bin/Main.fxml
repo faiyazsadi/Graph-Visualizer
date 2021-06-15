@@ -7,7 +7,8 @@
    <children>
       <Button id="callbfs" fx:id="callbfs" layoutX="1075.0" layoutY="89.0" mnemonicParsing="false" onAction="#bfsAnimation" prefHeight="36.0" prefWidth="122.0" text="Run BFS" />
       <Button id="calldfs" fx:id="calldfs" layoutX="1075.0" layoutY="174.0" mnemonicParsing="false" onAction="#callDFS" prefHeight="36.0" prefWidth="122.0" text="Run DFS" />
-      <Button fx:id="clear" layoutX="1075.0" layoutY="265.0" mnemonicParsing="false" onAction="#resetAnimation" prefHeight="36.0" prefWidth="122.0" text="Reset Animation" />
+      <Button fx:id="reset" layoutX="1075.0" layoutY="265.0" mnemonicParsing="false" onAction="#resetAnimation" prefHeight="36.0" prefWidth="122.0" text="Reset Animation" />
       <Button fx:id="pauseandplay" layoutX="1075.0" layoutY="338.0" mnemonicParsing="false" onAction="#pauseAndplayAnimation" prefHeight="36.0" prefWidth="122.0" text="Pause" />
+      <Button fx:id="clear" layoutX="1075.0" layoutY="431.0" mnemonicParsing="false" onAction="#clear" prefHeight="36.0" prefWidth="122.0" text="Clear Graph" />
    </children>
 </AnchorPane>

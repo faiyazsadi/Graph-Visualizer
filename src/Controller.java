@@ -33,6 +33,7 @@ public class Controller {
 //	@FXML private Button addEdgeButton;
 	@FXML private Button callbfs;
 	@FXML private Button calldfs;
+	@FXML private Button reset;
 	@FXML private Button clear;
 	@FXML private Button pauseandplay;
 	
@@ -77,11 +78,6 @@ public class Controller {
 			addVertex(mouseEvent);
 		}
 	}
-	
-//	public void callBFS() {
-//		int root = 1;
-//		bfsAnimation(root);
-//	}
 
 	public void addVertex(MouseEvent mouseEvent) {
 		
@@ -128,6 +124,28 @@ public class Controller {
         			adj[vertex1ID].add(vertex2ID);
         			adj[vertex2ID].add(vertex1ID);
         			System.out.println(vertex2ID);
+
+        			edge.setOnMousePressed(edgeEvent -> {
+        				// this removes an edge from the canvas.
+        				if(edgeEvent.isAltDown() && edgeEvent.isSecondaryButtonDown()) {
+        					graph.getChildren().remove(edge);
+        					int u = vertex1ID;
+        					int v = vertex2ID;
+        					edges[u][v] = null;
+        					edges[v][u] = null; 
+        					for(int i = 0; i < adj[u].size(); ++i) {
+        						if(adj[u].get(i) == v) {
+        							adj[u].remove(i);
+        						}
+        					}
+        					for(int i = 0; i < adj[v].size(); ++i) {
+        						if(adj[v].get(i) == u) {
+        							adj[v].remove(i);
+        						}
+        					}
+        					printGraph();
+        				}
+        			});
         			
         		}
                 System.out.println("Number of Edges " + edgeList.size());
@@ -165,8 +183,6 @@ public class Controller {
         	}
         });
        
-//            FillTransition fillTransition = new FillTransition(Duration.seconds(3), circle, (Color) circle.getFill(), Color.DARKBLUE);
-//            fillTransition.play();
         pane.getChildren().addAll(vertex, text);
         graph.getChildren().add(pane);
             
@@ -318,14 +334,20 @@ public class Controller {
 	}
 
 	public void clear() {
+		root = 1;
 		vertexCount = 0;
-		sequentialTransition.getChildren().clear();
 		for(int i = 0; i < 100; ++i) {
 			adj[i].clear();
 			vertexs[i] = null;
-			
+			for(int j = 0; j < 100; ++j) {
+				edges[i][j] = null;
+			}
 		}
+		nodes.clear();
 		vertexList.clear();
 		edgeList.clear();
+		graph.getChildren().clear();
+		pauseandplay.setText("Pause");
+		graph.getChildren().addAll(pauseandplay, callbfs, calldfs, reset, clear);
 	}
 }
