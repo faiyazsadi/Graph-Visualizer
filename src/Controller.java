@@ -1,9 +1,10 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Queue;
-import java.util.Stack;
 
+import javafx.animation.Animation.Status;
 import javafx.animation.FillTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -25,12 +26,15 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.util.Set;
+
 public class Controller {
 	@FXML private AnchorPane graph;
 //	@FXML private Button addEdgeButton;
 	@FXML private Button callbfs;
 	@FXML private Button calldfs;
-	@FXML private Button print;
+	@FXML private Button clear;
+	@FXML private Button pauseandplay;
 	
 	SequentialTransition sequentialTransition;
 	
@@ -38,8 +42,10 @@ public class Controller {
 	ArrayList<Circle> vertexList;
 	ArrayList<Edge> edgeList; 
 	// have to clear vertexs
+	int root;
 	Vertex[] vertexs;
 	Edge[][] edges;
+	Set<Integer> nodes;
 
 	int  clickCount = 0, vertex1ID, vertex2ID;
 	StackPane stackPane1, stackPane2;
@@ -51,9 +57,10 @@ public class Controller {
 
 
 	public Controller() {
+		root = 1;
 		vertexList = new ArrayList<>();
 		edgeList = new ArrayList<>();
-		System.out.println("Constructor");
+//		System.out.println("Constructor");
 		adj = new ArrayList[100];
 		for(int i = 0; i < 100; ++i) { 
 			adj[i] = new ArrayList<>(); 
@@ -62,6 +69,7 @@ public class Controller {
 		vertexs = new Vertex[100];
 		edges  = new Edge[100][100];
 		discover = new boolean[100];
+		nodes = new HashSet<>();
 	}
 	
 	public void onGraphPressed(MouseEvent mouseEvent) {
@@ -81,11 +89,8 @@ public class Controller {
         Vertex vertex = new Vertex(mouseEvent, vertexCount, vertexs);
         
         vertexList.add(vertex);
-//        
-//        circle.setFill(Color.ROYALBLUE);
-//        circle.setCenterX(mouseEvent.getX());
-//        circle.setCenterY(mouseEvent.getY());
-//        circle.setRadius(40);
+        nodes.add(vertex.ID);
+        
         
         Text text = new Text(String.valueOf(vertexCount));
         text.setFill(Color.WHITE);
@@ -110,7 +115,7 @@ public class Controller {
         			stackPane1 = (StackPane) vertex.getParent();
         			clickCount = 1;
         			
-        			System.out.println("BOI " + vertex1ID);
+        			System.out.println(vertex1ID);
         		}
         		else if(clickCount == 1) {
         			vertex2ID = vertex.ID;
@@ -122,10 +127,41 @@ public class Controller {
         			// bi-directional edges
         			adj[vertex1ID].add(vertex2ID);
         			adj[vertex2ID].add(vertex1ID);
-        			System.out.println("BOI " + vertex2ID);
+        			System.out.println(vertex2ID);
         			
         		}
                 System.out.println("Number of Edges " + edgeList.size());
+        	}
+        	else if(event.isAltDown() && event.isSecondaryButtonDown()) {
+        		// this is here to delete selected node from the graph.
+//        		vertexCount--;
+        		int id = vertex.ID;
+        		StackPane saPane = (StackPane) vertex.getParent();
+        		graph.getChildren().remove(saPane);
+        		int u = id;
+        		for(int i = 0; i < adj[id].size(); ++i) {
+        			int v = adj[id].get(i);
+        			if(edges[u][v] != null) {
+        				graph.getChildren().remove(edges[u][v]);
+        			}
+        			if(edges[v][u] != null) {
+        				graph.getChildren().remove(edges[v][u]);
+        			}
+        			edges[u][v] = null; 
+        			edges[v][u] = null; 
+        			for(int j = 0; j < adj[v].size(); ++j) {
+        				if(adj[v].get(j) == u) {
+        					adj[v].remove(j);
+        					System.out.println("Removed " + u);
+        				}
+        			}
+        		}
+        		nodes.remove(id);
+        		root = nodes.iterator().next();
+        		System.out.println("Next Root is: " + root);
+        		vertexs[id] = null; 
+        		adj[id].clear();
+        		printGraph();
         	}
         });
        
@@ -136,47 +172,11 @@ public class Controller {
             
 	}
 	
-//	public void addEdge() {
-//		sequentialTransition = new SequentialTransition();
-//		for(int i = 0; i < vertexList.size(); ++i) {
-//			for(int j = i + 1; j < vertexList.size(); ++j) {
-//				StackPane c1 = (StackPane) vertexList.get(i).getParent();
-//				StackPane c2 = (StackPane) vertexList.get(j).getParent();
-//				Edge edge = new Edge(c1, c2, graph, edges, 1, 2);
-//				edgeList.add(edge);
-//				
-//				double startX = (double) vertexList.get(i).getCenterX();
-//				double startY = (double) vertexList.get(i).getCenterY();
-//				double endX = (double) vertexList.get(j).getCenterX();
-//				double endY = (double) vertexList.get(j).getCenterY();
-//				
-//				DoubleProperty signalPosition = new SimpleDoubleProperty(0);
-//				edge.strokeProperty().bind(Bindings.createObjectBinding(() -> 
-//                new LinearGradient(startX, startY, endX, endY, false, CycleMethod.NO_CYCLE, 
-//                    new Stop(0, Color.ROYALBLUE),
-//                    new Stop(signalPosition.get(), Color.ROYALBLUE),
-//                    new Stop(signalPosition.get(), Color.SKYBLUE),
-//                    new Stop(1, Color.SKYBLUE)), 
-//                signalPosition));
-//
-//            Timeline animation = new Timeline (
-//                    new KeyFrame(Duration.ZERO, new KeyValue(signalPosition, 0)),
-//                    new KeyFrame(Duration.seconds(3), new KeyValue(signalPosition, 1))
-//            );
-//            FillTransition fillTransition = new FillTransition(Duration.seconds(2), vertexList.get(j), (Color) vertexList.get(j).getFill(), Color.LIME);
-//            vertexList.get(j).setFill(Color.LIME);
-//            sequentialTransition.getChildren().add(animation);
-//            sequentialTransition.getChildren().add(fillTransition);
-//			}
-//		}
-//		sequentialTransition.play();
-//	}
-
 	public void bfsAnimation() {
 		resetAnimation();
 		Arrays.fill(discover, false);
 
-		int root = 1;
+//		int root = 1;
 		sequentialTransition = new SequentialTransition();
         FillTransition fillTransition = new FillTransition(Duration.seconds(2), vertexs[root], (Color) vertexs[root].getFill(), Color.LIME);
         sequentialTransition.getChildren().add(fillTransition);
@@ -225,7 +225,7 @@ public class Controller {
 	public void callDFS() {
 		resetAnimation();
 		Arrays.fill(discover, false);
-		int root = 1;
+//		int root = 1;
 		sequentialTransition = new SequentialTransition();
 		dfsAnimation(root, sequentialTransition);
 		sequentialTransition.play();
@@ -278,14 +278,33 @@ public class Controller {
 
 	public void resetAnimation() {
 		for(int i = 1; i <= vertexCount; ++i) {
-			vertexs[i].setFill(Color.ROYALBLUE);
+			if(vertexs[i] != null) {
+				vertexs[i].setFill(Color.ROYALBLUE);
+			}
 		}
 		for(int i = 1; i <= vertexCount; ++i) {
 			for(int j = 1; j <= vertexCount; ++j) {
 				if(edges[i][j] != null) {
-					edges[i][j].setFill(Color.SKYBLUE);
+					edges[i][j].strokeProperty().unbind();
+					edges[i][j].setStroke(Color.SKYBLUE);
+					
+				}
+				if(edges[j][i] != null) {
+					edges[j][i].strokeProperty().unbind();
+					edges[j][i].setStroke(Color.SKYBLUE);
 				}
 			}
+		}
+	}
+	
+	public void pauseAndplayAnimation() {
+		if(sequentialTransition.getStatus() == Status.RUNNING) {
+			pauseandplay.setText("Play");
+			sequentialTransition.pause();
+		}
+		else if(sequentialTransition.getStatus() == Status.PAUSED) {
+			pauseandplay.setText("Pause");
+			sequentialTransition.play();
 		}
 	}
 

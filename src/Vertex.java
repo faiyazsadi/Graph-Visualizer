@@ -13,4 +13,5 @@ public class Vertex extends Circle {
         setRadius(40);
         vertexs[ID] = this;
 	}
+	
 }

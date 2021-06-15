@@ -5,8 +5,9 @@
 
 <AnchorPane id="graph" fx:id="graph" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMousePressed="#onGraphPressed" prefHeight="898.0" prefWidth="1225.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
-      <Button id="print" fx:id="print" layoutX="650.0" layoutY="78.0" mnemonicParsing="false" onAction="#printGraph" prefHeight="36.0" prefWidth="122.0" text="Print Graph" />
-      <Button id="callbfs" fx:id="callbfs" layoutX="54.0" layoutY="85.0" mnemonicParsing="false" onAction="#bfsAnimation" prefHeight="36.0" prefWidth="122.0" text="BFS" />
-      <Button id="calldfs" fx:id="calldfs" layoutX="383.0" layoutY="91.0" mnemonicParsing="false" onAction="#callDFS" prefHeight="36.0" prefWidth="122.0" text="DFS" />
+      <Button id="callbfs" fx:id="callbfs" layoutX="1075.0" layoutY="89.0" mnemonicParsing="false" onAction="#bfsAnimation" prefHeight="36.0" prefWidth="122.0" text="Run BFS" />
+      <Button id="calldfs" fx:id="calldfs" layoutX="1075.0" layoutY="174.0" mnemonicParsing="false" onAction="#callDFS" prefHeight="36.0" prefWidth="122.0" text="Run DFS" />
+      <Button fx:id="clear" layoutX="1075.0" layoutY="265.0" mnemonicParsing="false" onAction="#resetAnimation" prefHeight="36.0" prefWidth="122.0" text="Reset Animation" />
+      <Button fx:id="pauseandplay" layoutX="1075.0" layoutY="338.0" mnemonicParsing="false" onAction="#pauseAndplayAnimation" prefHeight="36.0" prefWidth="122.0" text="Pause" />
    </children>
 </AnchorPane>
