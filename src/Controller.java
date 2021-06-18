@@ -1,9 +1,8 @@
-import java.nio.BufferUnderflowException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-
+import java.util.Optional;
 import java.util.Queue;
 
 import javafx.animation.Animation.Status;
@@ -19,13 +18,13 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -367,48 +366,53 @@ public class Controller {
 	}
 
 	public void setRoot() {
-		VBox vBox = new VBox();
-		TextField textField = new TextField();
-		textField.setPrefSize(20, 30);
-		Button button = new Button("Set Root");
-		Label label = new Label("Enter New Root.");
-		vBox.getChildren().addAll(label, textField, button);
-		vBox.setLayoutX(500);
-		vBox.setLayoutY(300);
-		vBox.setSpacing(20);
-		button.setOnAction(event -> {
+		
+		TextInputDialog dialog = new TextInputDialog("1");
+		StringBuilder availableNodes = new StringBuilder();
+		availableNodes.append(new String("["));
+		int count = 0;
+		for(int elem : nodes) {
+			count += 1;
+			availableNodes.append(String.valueOf(elem));
+			if(count != nodes.size()) {
+				availableNodes.append(", ");
+			}
+		}
+		availableNodes.append("]");
 
-			String string = textField.getText();
-			
-			if(string.isEmpty()) {
-				showErrorDialog();
-				return;
-			}
-			
-			int newRoot;
-			
-			try {
-				newRoot = Integer.parseInt(string);
-			}
-			catch (NumberFormatException e) {
-				graph.getChildren().remove(vBox);
-				showErrorDialog();
-				return;
-			}
-
-			System.out.println(newRoot);
+		dialog.setHeaderText("Choose Root Node from these: " + availableNodes.toString());
+		dialog.setTitle("Set New Root");
+		
+//		dialog.setHeaderText(null);
+		dialog.setGraphic(null);
+		
+		dialog.setContentText("New Root Node: ");
+		Optional<String> result = dialog.showAndWait();
+		if(result.isPresent()) {
+			System.out.println(result.get());
+		}
+		else {
+			System.out.println("Enter Correct Value.");
+			return;
+		}
+		
+		int newRoot;
+		
+		try {
+			newRoot = Integer.parseInt(result.get());
 			if(nodes.contains(newRoot)) {
 				setNewRoot(newRoot);
-				vBox.getChildren().clear();
-				graph.getChildren().remove(vBox);
 			}
 			else {
-				graph.getChildren().remove(vBox);
+				setRootButton.setDisable(true);
 				showErrorDialog();
+				return;
 			}
-
-		});
-		graph.getChildren().add(vBox);
+		}
+		catch (NumberFormatException e) {
+			showErrorDialog();
+			return;
+		}
 	}
 	
 	
@@ -419,7 +423,7 @@ public class Controller {
 	public void showErrorDialog() {
 		StackPane stackpane = new StackPane();
 		stackpane.setLayoutX(400);
-		stackpane.setLayoutY(500);
+		stackpane.setLayoutY(400);
 		System.out.println("New Root is not present in the Graph");
 		JFXDialogLayout content = new JFXDialogLayout();
 		content.setStyle("-fx-background-color: royalblue;");
@@ -453,11 +457,12 @@ public class Controller {
 
 		button.setOnAction(event -> {
 			dialog.close();
+			setRootButton.setDisable(false);
+			setRoot();
 		});
 		content.setActions(button);
 		dialog.show();
 		graph.getChildren().add(stackpane);
-		setRoot();
 	}
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDialogLayout?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -18,6 +19,7 @@
             <Font size="14.0" />
          </font>
       </JFXButton>
-      <StackPane layoutX="260.0" layoutY="245.0" prefHeight="258.0" prefWidth="341.0" />
+      <StackPane fx:id="stackpane" layoutX="361.0" layoutY="90.0" prefHeight="168.0" prefWidth="422.0" />
+      <JFXDialogLayout fx:id="content" layoutX="395.0" layoutY="354.0" prefHeight="153.0" prefWidth="342.0" />
    </children>
 </AnchorPane>
