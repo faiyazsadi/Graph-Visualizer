@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="graph" fx:id="graph" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMousePressed="#onGraphPressed" prefHeight="898.0" prefWidth="1225.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<AnchorPane id="graph" fx:id="graph" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMousePressed="#onGraphPressed" prefHeight="898.0" prefWidth="1225.0" style="-fx-background-color: #B0C4DE;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
       <Button id="callbfs" fx:id="callbfs" layoutX="1075.0" layoutY="89.0" mnemonicParsing="false" onAction="#bfsAnimation" prefHeight="36.0" prefWidth="122.0" text="Run BFS" />
       <Button id="calldfs" fx:id="calldfs" layoutX="1075.0" layoutY="174.0" mnemonicParsing="false" onAction="#callDFS" prefHeight="36.0" prefWidth="122.0" text="Run DFS" />
       <Button fx:id="reset" layoutX="1075.0" layoutY="265.0" mnemonicParsing="false" onAction="#resetAnimation" prefHeight="36.0" prefWidth="122.0" text="Reset Animation" />
       <Button fx:id="pauseandplay" layoutX="1075.0" layoutY="338.0" mnemonicParsing="false" onAction="#pauseAndplayAnimation" prefHeight="36.0" prefWidth="122.0" text="Pause" />
-      <Button fx:id="clear" layoutX="1075.0" layoutY="431.0" mnemonicParsing="false" onAction="#clear" prefHeight="36.0" prefWidth="122.0" text="Clear Graph" />
+      <Button id="clear" fx:id="clear" layoutX="1075.0" layoutY="431.0" mnemonicParsing="false" onAction="#clear" prefHeight="36.0" prefWidth="122.0" text="Clear Graph" />
+      <JFXButton fx:id="setRootButton" layoutX="1082.0" layoutY="529.0" onAction="#setRoot" prefHeight="36.0" prefWidth="122.0" style="-fx-background-color: #4169E1;" text="Set Root" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <StackPane layoutX="260.0" layoutY="245.0" prefHeight="258.0" prefWidth="341.0" />
    </children>
 </AnchorPane>

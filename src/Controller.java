@@ -1,7 +1,9 @@
+import java.nio.BufferUnderflowException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+
 import java.util.Queue;
 
 import javafx.animation.Animation.Status;
@@ -13,11 +15,17 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+
 import javafx.fxml.FXML;
+
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -28,6 +36,11 @@ import javafx.util.Duration;
 
 import java.util.Set;
 
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+
 public class Controller {
 	@FXML private AnchorPane graph;
 //	@FXML private Button addEdgeButton;
@@ -36,7 +49,7 @@ public class Controller {
 	@FXML private Button reset;
 	@FXML private Button clear;
 	@FXML private Button pauseandplay;
-	
+	@FXML private JFXButton setRootButton;
 	SequentialTransition sequentialTransition;
 	
 	int vertexCount = 0;
@@ -190,6 +203,7 @@ public class Controller {
 	
 	public void bfsAnimation() {
 		resetAnimation();
+		pauseandplay.setText("Pause");
 		Arrays.fill(discover, false);
 
 //		int root = 1;
@@ -240,6 +254,7 @@ public class Controller {
 	
 	public void callDFS() {
 		resetAnimation();
+		pauseandplay.setText("Pause");
 		Arrays.fill(discover, false);
 //		int root = 1;
 		sequentialTransition = new SequentialTransition();
@@ -350,4 +365,99 @@ public class Controller {
 		pauseandplay.setText("Pause");
 		graph.getChildren().addAll(pauseandplay, callbfs, calldfs, reset, clear);
 	}
+
+	public void setRoot() {
+		VBox vBox = new VBox();
+		TextField textField = new TextField();
+		textField.setPrefSize(20, 30);
+		Button button = new Button("Set Root");
+		Label label = new Label("Enter New Root.");
+		vBox.getChildren().addAll(label, textField, button);
+		vBox.setLayoutX(500);
+		vBox.setLayoutY(300);
+		vBox.setSpacing(20);
+		button.setOnAction(event -> {
+
+			String string = textField.getText();
+			
+			if(string.isEmpty()) {
+				showErrorDialog();
+				return;
+			}
+			
+			int newRoot;
+			
+			try {
+				newRoot = Integer.parseInt(string);
+			}
+			catch (NumberFormatException e) {
+				graph.getChildren().remove(vBox);
+				showErrorDialog();
+				return;
+			}
+
+			System.out.println(newRoot);
+			if(nodes.contains(newRoot)) {
+				setNewRoot(newRoot);
+				vBox.getChildren().clear();
+				graph.getChildren().remove(vBox);
+			}
+			else {
+				graph.getChildren().remove(vBox);
+				showErrorDialog();
+			}
+
+		});
+		graph.getChildren().add(vBox);
+	}
+	
+	
+	public void setNewRoot(int newRoot) {
+		root = newRoot;
+	}
+
+	public void showErrorDialog() {
+		StackPane stackpane = new StackPane();
+		stackpane.setLayoutX(400);
+		stackpane.setLayoutY(500);
+		System.out.println("New Root is not present in the Graph");
+		JFXDialogLayout content = new JFXDialogLayout();
+		content.setStyle("-fx-background-color: royalblue;");
+		Text heading = new Text("Node Not Found!");
+		heading.setFill(Color.WHITE);
+		heading.setStyle("-fx-font: 24 Roboto");
+		content.setHeading(heading);
+		
+		StringBuilder availableNodes = new StringBuilder();
+		availableNodes.append(new String("["));
+		int count = 0;
+		for(int elem : nodes) {
+			count += 1;
+			availableNodes.append(String.valueOf(elem));
+			if(count != nodes.size()) {
+				availableNodes.append(", ");
+			}
+		}
+		availableNodes.append("]");
+		System.out.println(availableNodes);
+		
+		Text body = new Text("Choose one of these Nodes " + availableNodes.toString());
+		body.setFill(Color.WHITE);
+		body.setStyle("-fx-font: 20 Roboto;");
+		content.setBody(body);
+		JFXDialog dialog = new JFXDialog(stackpane, content, JFXDialog.DialogTransition.CENTER);
+		JFXButton button = new JFXButton();
+		button.setText("Okay");
+		button.setTextFill(Color.BLACK);
+		button.setStyle("-fx-background-color: white;");
+
+		button.setOnAction(event -> {
+			dialog.close();
+		});
+		content.setActions(button);
+		dialog.show();
+		graph.getChildren().add(stackpane);
+		setRoot();
+	}
+
 }
