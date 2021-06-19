@@ -14,7 +14,8 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Button;
@@ -43,11 +44,11 @@ import com.jfoenix.controls.JFXDialogLayout;
 public class Controller {
 	@FXML private AnchorPane graph;
 //	@FXML private Button addEdgeButton;
-	@FXML private Button callbfs;
-	@FXML private Button calldfs;
-	@FXML private Button reset;
-	@FXML private Button clear;
-	@FXML private Button pauseandplay;
+	@FXML private JFXButton callbfs;
+	@FXML private JFXButton calldfs;
+	@FXML private JFXButton reset;
+	@FXML private JFXButton clear;
+	@FXML private JFXButton pauseandplay;
 	@FXML private JFXButton setRootButton;
 	SequentialTransition sequentialTransition;
 	
@@ -110,8 +111,12 @@ public class Controller {
 
         pane.setOnMouseDragged(event -> {
             if(event.isSecondaryButtonDown()) {
-                pane.setTranslateX(event.getX() + pane.getTranslateX());
-                pane.setTranslateY(event.getY() + pane.getTranslateY());
+//                pane.setTranslateX(event.getX() + pane.getTranslateX());
+//                pane.setTranslateY(event.getY() + pane.getTranslateY());
+                pane.setTranslateX(event.getX() + pane.getTranslateX() - 40);
+                pane.setTranslateY(event.getY() + pane.getTranslateY() - 35);
+                vertex.setCenterX(pane.getTranslateX());
+                vertex.setCenterY(pane.getTranslateY());
             }
             
         });
@@ -226,7 +231,7 @@ public class Controller {
                     DoubleProperty signalPosition = new SimpleDoubleProperty(0);
                     Edge edge = edges[u][v];
                     edge.strokeProperty().bind(Bindings.createObjectBinding(() -> 
-                    new LinearGradient(startX, startY, endX, endY, false, CycleMethod.NO_CYCLE, 
+                    new LinearGradient(startX, startY, endX, endY, false, CycleMethod.REFLECT, 
                         new Stop(0, Color.ROYALBLUE),
                         new Stop(signalPosition.get(), Color.ROYALBLUE),
                         new Stop(signalPosition.get(), Color.SKYBLUE),
@@ -249,6 +254,13 @@ public class Controller {
 			}
 		}
 		sequentialTransition.play();
+        sequentialTransition.setOnFinished((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	System.out.println("Animation Finished!");
+		    	animationFinished("BFS ");
+		    }
+		});
 	}
 	
 	public void callDFS() {
@@ -259,6 +271,14 @@ public class Controller {
 		sequentialTransition = new SequentialTransition();
 		dfsAnimation(root, sequentialTransition);
 		sequentialTransition.play();
+
+		sequentialTransition.setOnFinished((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	System.out.println("Animation Finished!");
+		    	animationFinished("DFS ");
+		    }
+		});
 	}
 	
 	public void dfsAnimation(int u, SequentialTransition sequentialTransition) {
@@ -304,6 +324,41 @@ public class Controller {
                 dfsAnimation(v, sequentialTransition);
 			}
 		}
+	}
+
+	public void animationFinished(String algo) {
+	// put jfoenix dialog here	
+		StackPane stackpane = new StackPane();
+		stackpane.setTranslateX(450);
+		stackpane.setTranslateY(200);
+
+		JFXDialogLayout content = new JFXDialogLayout();
+
+		Text heading = new Text("Animation Staus.");
+		heading.setFill(Color.WHITE);
+		heading.setStyle("-fx-font: 18 Roboto;");
+		content.setHeading(heading);
+
+		Text body = new Text(algo + "Animation Has Finished!");
+		body.setFill(Color.WHITE);
+		body.setStyle("-fx-font: 16 Roboto");
+		content.setBody(body);
+		content.setStyle("-fx-background-color: royalblue;");
+
+		JFXDialog dialog = new JFXDialog(stackpane, content, JFXDialog.DialogTransition.CENTER);
+		dialog.setPrefSize(40, 5);
+
+		JFXButton button = new JFXButton();
+		button.setText("Okay");
+		button.setTextFill(Color.BLACK);
+		button.setStyle("-fx-background-color: white;");
+		button.setOnAction(event -> {
+			dialog.close();
+		});
+		
+		content.setActions(button);
+		dialog.show();
+		graph.getChildren().add(stackpane);
 	}
 
 	public void resetAnimation() {
@@ -362,7 +417,7 @@ public class Controller {
 		edgeList.clear();
 		graph.getChildren().clear();
 		pauseandplay.setText("Pause");
-		graph.getChildren().addAll(pauseandplay, callbfs, calldfs, reset, clear);
+		graph.getChildren().addAll(pauseandplay, callbfs, calldfs, reset, clear, setRootButton);
 	}
 
 	public void setRoot() {
@@ -422,8 +477,8 @@ public class Controller {
 
 	public void showErrorDialog() {
 		StackPane stackpane = new StackPane();
-		stackpane.setLayoutX(400);
-		stackpane.setLayoutY(400);
+		stackpane.setLayoutX(350);
+		stackpane.setLayoutY(300);
 		System.out.println("New Root is not present in the Graph");
 		JFXDialogLayout content = new JFXDialogLayout();
 		content.setStyle("-fx-background-color: royalblue;");

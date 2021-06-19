@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXDialogLayout?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="graph" fx:id="graph" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMousePressed="#onGraphPressed" prefHeight="898.0" prefWidth="1225.0" style="-fx-background-color: #B0C4DE;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
-      <Button id="callbfs" fx:id="callbfs" layoutX="1075.0" layoutY="89.0" mnemonicParsing="false" onAction="#bfsAnimation" prefHeight="36.0" prefWidth="122.0" text="Run BFS" />
-      <Button id="calldfs" fx:id="calldfs" layoutX="1075.0" layoutY="174.0" mnemonicParsing="false" onAction="#callDFS" prefHeight="36.0" prefWidth="122.0" text="Run DFS" />
-      <Button fx:id="reset" layoutX="1075.0" layoutY="265.0" mnemonicParsing="false" onAction="#resetAnimation" prefHeight="36.0" prefWidth="122.0" text="Reset Animation" />
-      <Button fx:id="pauseandplay" layoutX="1075.0" layoutY="338.0" mnemonicParsing="false" onAction="#pauseAndplayAnimation" prefHeight="36.0" prefWidth="122.0" text="Pause" />
-      <Button id="clear" fx:id="clear" layoutX="1075.0" layoutY="431.0" mnemonicParsing="false" onAction="#clear" prefHeight="36.0" prefWidth="122.0" text="Clear Graph" />
-      <JFXButton fx:id="setRootButton" layoutX="1082.0" layoutY="529.0" onAction="#setRoot" prefHeight="36.0" prefWidth="122.0" style="-fx-background-color: #4169E1;" text="Set Root" textFill="WHITE">
+      <JFXButton fx:id="setRootButton" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="186.0" onAction="#setRoot" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Set Root" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
       </JFXButton>
-      <StackPane fx:id="stackpane" layoutX="361.0" layoutY="90.0" prefHeight="168.0" prefWidth="422.0" />
-      <JFXDialogLayout fx:id="content" layoutX="395.0" layoutY="354.0" prefHeight="153.0" prefWidth="342.0" />
+      <JFXButton fx:id="callbfs" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="42.0" onAction="#bfsAnimation" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Run BFS" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="calldfs" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="90.0" onAction="#callDFS" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Run DFS" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="reset" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="233.0" onAction="#resetAnimation" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Reset Animation" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="pauseandplay" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="138.0" onAction="#pauseAndplayAnimation" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Pause" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="clear" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="282.0" onAction="#clear" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Clear Graph" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>
