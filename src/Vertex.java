@@ -8,8 +8,8 @@ public class Vertex extends Circle {
 	public Vertex(MouseEvent mouseEvent, int vertexCount, Vertex[] vertexs) {
 		ID = vertexCount;
 		setFill(Color.web("#87CEEB"));
-		setStroke(Color.BLACK);
-		setStrokeWidth(4);
+		setStroke(Color.DARKGREEN);
+		setStrokeWidth(5);
         setCenterX(mouseEvent.getX());
         setCenterY(mouseEvent.getY());
         setRadius(40);

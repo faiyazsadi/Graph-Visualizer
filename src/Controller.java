@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -34,12 +35,11 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
-
 import java.util.Set;
 
 
@@ -110,6 +110,8 @@ public class Controller {
         
         Text text = new Text(String.valueOf(vertexCount));
         text.setFill(Color.BLACK);
+        text.setFont(Font.font("Roboto", FontWeight.BOLD, 16));
+        text.setOnMousePressed(null);
         //text.toFront();
         
         StackPane pane = new StackPane();
@@ -128,7 +130,7 @@ public class Controller {
             
         });
 
-        vertex.setOnMousePressed(event -> {
+        pane.setOnMousePressed(event -> {
         	if(event.isControlDown() && event.isSecondaryButtonDown()) {
         		if(clickCount == 0) {
         			vertex1ID = vertex.ID;
@@ -154,11 +156,8 @@ public class Controller {
         				if(edgeEvent.isAltDown() && edgeEvent.isSecondaryButtonDown()) {
         					graph.getChildren().remove(edge);
         					Pair<Integer, Integer> pair = EdgeMap.get(edge);
-        					
         					int u = pair.getKey();
-
         					int v = pair.getValue();
-
         					edges[u][v] = null;
         					edges[v][u] = null; 
         					for(int i = 0; i < adj[u].size(); ++i) {
@@ -183,6 +182,8 @@ public class Controller {
         		// this is here to delete selected node from the graph.
 //        		vertexCount--;
         		int id = vertex.ID;
+//        		Vertex vertex1 = (Vertex) pane.getChildren().get(0);
+//        		int id = vertex1.ID;
         		StackPane saPane = (StackPane) vertex.getParent();
         		graph.getChildren().remove(saPane);
         		int u = id;
@@ -204,7 +205,9 @@ public class Controller {
         			}
         		}
         		nodes.remove(id);
-        		root = nodes.iterator().next();
+        		if(!nodes.contains(root)) {
+        			root = nodes.iterator().next();
+        		}
         		System.out.println("Next Root is: " + root);
         		vertexs[id] = null; 
         		adj[id].clear();
@@ -224,7 +227,7 @@ public class Controller {
 
 //		int root = 1;
 		sequentialTransition = new SequentialTransition();
-        FillTransition fillTransition = new FillTransition(Duration.seconds(2), vertexs[root], (Color) vertexs[root].getFill(), Color.PURPLE);
+        FillTransition fillTransition = new FillTransition(Duration.seconds(2), vertexs[root], (Color) vertexs[root].getFill(), Color.web("#98FB98"));
         sequentialTransition.getChildren().add(fillTransition);
 
 		discover[root] = true;
@@ -252,11 +255,11 @@ public class Controller {
 
                     Timeline animation = new Timeline (
                         new KeyFrame(Duration.ZERO, new KeyValue(signalPosition, 0)),
-                        new KeyFrame(Duration.seconds(3), new KeyValue(signalPosition, 1))
+                        new KeyFrame(Duration.seconds(2), new KeyValue(signalPosition, 1))
                     );
                     
                     sequentialTransition.getChildren().add(animation);
-                    fillTransition = new FillTransition(Duration.seconds(2), vertexs[v], (Color) vertexs[v].getFill(), Color.PURPLE);
+                    fillTransition = new FillTransition(Duration.seconds(2), vertexs[v], (Color) vertexs[v].getFill(), Color.web("#98FB98"));
 
                     sequentialTransition.getChildren().add(fillTransition);
                     
@@ -294,9 +297,9 @@ public class Controller {
 	}
 	
 	public void dfsAnimation(int u, SequentialTransition sequentialTransition) {
-		if(vertexs[u].getFill() != Color.LIME) {
-            FillTransition fillTransition = new FillTransition(Duration.seconds(2), vertexs[u], (Color) vertexs[u].getFill(), Color.LIME);
-            vertexs[u].setFill(Color.LIME);
+		if(vertexs[u].getFill() != Color.web("#98FB98")) {
+            FillTransition fillTransition = new FillTransition(Duration.seconds(1), vertexs[u], (Color) vertexs[u].getFill(), Color.web("#98FB98"));
+            vertexs[u].setFill(Color.web("#98FB98"));
             sequentialTransition.getChildren().add(fillTransition);
 		}
 
@@ -323,19 +326,22 @@ public class Controller {
 
                 Timeline animation = new Timeline (
                     new KeyFrame(Duration.ZERO, new KeyValue(signalPosition, 0)),
-                    new KeyFrame(Duration.seconds(3), new KeyValue(signalPosition, 1))
+                    new KeyFrame(Duration.seconds(2), new KeyValue(signalPosition, 1))
                 );
                 
                 sequentialTransition.getChildren().add(animation);
-                if(vertexs[v].getFill() != Color.LIME) {
-                    FillTransition fillTransition = new FillTransition(Duration.seconds(2), vertexs[v], (Color) vertexs[v].getFill(), Color.LIME);
-                    vertexs[v].setFill(Color.LIME);
+                if(vertexs[v].getFill() != Color.web("#98FB98")) {
+                    FillTransition fillTransition = new FillTransition(Duration.seconds(1), vertexs[v], (Color) vertexs[v].getFill(), Color.web("#98FB98"));
+                    vertexs[v].setFill(Color.web("#98FB98"));
                     sequentialTransition.getChildren().add(fillTransition);
                 }
-
+                
                 dfsAnimation(v, sequentialTransition);
 			}
 		}
+		FillTransition fillTransition1 = new FillTransition(Duration.millis(500), vertexs[u], (Color) vertexs[u].getFill(), Color.web("#FF6347"));
+		FillTransition fillTransition2 = new FillTransition(Duration.millis(500), vertexs[u], Color.web("#FF6347"), (Color) vertexs[u].getFill());
+		sequentialTransition.getChildren().addAll(fillTransition1, fillTransition2);
 	}
 
 	public void animationFinished(String algo) {
@@ -441,6 +447,9 @@ public class Controller {
 	public void setRoot() {
 		
 		TextInputDialog dialog = new TextInputDialog("1");
+		Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(new Image(this.getClass().getResourceAsStream("setroot.png")));
+
 		StringBuilder availableNodes = new StringBuilder();
 		availableNodes.append(new String("["));
 		int count = 0;
