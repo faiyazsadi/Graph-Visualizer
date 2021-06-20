@@ -1,3 +1,4 @@
+import java.nio.BufferUnderflowException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,9 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -206,12 +210,12 @@ public class Controller {
 	
 	public void bfsAnimation() {
 		resetAnimation();
-		pauseandplay.setText("Pause");
+		pauseandplay.setText("Pause Animation");
 		Arrays.fill(discover, false);
 
 //		int root = 1;
 		sequentialTransition = new SequentialTransition();
-        FillTransition fillTransition = new FillTransition(Duration.seconds(2), vertexs[root], (Color) vertexs[root].getFill(), Color.LIME);
+        FillTransition fillTransition = new FillTransition(Duration.seconds(2), vertexs[root], (Color) vertexs[root].getFill(), Color.PURPLE);
         sequentialTransition.getChildren().add(fillTransition);
 
 		discover[root] = true;
@@ -230,7 +234,7 @@ public class Controller {
                     DoubleProperty signalPosition = new SimpleDoubleProperty(0);
                     Edge edge = edges[u][v];
                     edge.strokeProperty().bind(Bindings.createObjectBinding(() -> 
-                    new LinearGradient(startX, startY, endX, endY, false, CycleMethod.REFLECT, 
+                    new LinearGradient(startX, startY, endX, endY, false, CycleMethod.NO_CYCLE, 
                         new Stop(0, Color.ROYALBLUE),
                         new Stop(signalPosition.get(), Color.ROYALBLUE),
                         new Stop(signalPosition.get(), Color.SKYBLUE),
@@ -243,7 +247,7 @@ public class Controller {
                     );
                     
                     sequentialTransition.getChildren().add(animation);
-                    fillTransition = new FillTransition(Duration.seconds(2), vertexs[v], (Color) vertexs[v].getFill(), Color.LIME);
+                    fillTransition = new FillTransition(Duration.seconds(2), vertexs[v], (Color) vertexs[v].getFill(), Color.PURPLE);
 
                     sequentialTransition.getChildren().add(fillTransition);
                     
@@ -264,7 +268,7 @@ public class Controller {
 	
 	public void callDFS() {
 		resetAnimation();
-		pauseandplay.setText("Pause");
+		pauseandplay.setText("Pause Animation");
 		Arrays.fill(discover, false);
 //		int root = 1;
 		sequentialTransition = new SequentialTransition();
@@ -333,24 +337,28 @@ public class Controller {
 
 		JFXDialogLayout content = new JFXDialogLayout();
 
-		Text heading = new Text("Animation Staus.");
-		heading.setFill(Color.WHITE);
-		heading.setStyle("-fx-font: 18 Roboto;");
+		Text heading = new Text("Animation Status");
+		heading.setFill(Color.BLACK);
+		heading.setFont(Font.font("Roboto", FontWeight.BOLD, 18));
 		content.setHeading(heading);
+		
 
-		Text body = new Text(algo + "Animation Has Finished!");
-		body.setFill(Color.WHITE);
-		body.setStyle("-fx-font: 16 Roboto");
+		Text body = new Text(algo + "Animation has finished.");
+		body.setFill(Color.BLACK);
+		body.setStyle("-fx-font: 16 Roboto_Mono");
 		content.setBody(body);
-		content.setStyle("-fx-background-color: royalblue;");
+		content.setStyle("-fx-background-color:  white;");
 
 		JFXDialog dialog = new JFXDialog(stackpane, content, JFXDialog.DialogTransition.CENTER);
 		dialog.setPrefSize(40, 5);
 
 		JFXButton button = new JFXButton();
 		button.setText("Okay");
-		button.setTextFill(Color.BLACK);
-		button.setStyle("-fx-background-color: white;");
+		button.setFont(Font.font("Roboto", FontWeight.BOLD, 14));
+		button.setTextFill(Color.WHITE);
+		button.setFocusTraversable(false);
+		button.setStyle("-fx-background-color: #1E90FF;");
+		button.setPrefWidth(60);
 		button.setOnAction(event -> {
 			dialog.close();
 		});
@@ -363,7 +371,7 @@ public class Controller {
 	public void resetAnimation() {
 		for(int i = 1; i <= vertexCount; ++i) {
 			if(vertexs[i] != null) {
-				vertexs[i].setFill(Color.ROYALBLUE);
+				vertexs[i].setFill(Color.web("#87CEEB"));
 			}
 		}
 		for(int i = 1; i <= vertexCount; ++i) {
@@ -383,11 +391,11 @@ public class Controller {
 	
 	public void pauseAndplayAnimation() {
 		if(sequentialTransition.getStatus() == Status.RUNNING) {
-			pauseandplay.setText("Play");
+			pauseandplay.setText("Play Animation");
 			sequentialTransition.pause();
 		}
 		else if(sequentialTransition.getStatus() == Status.PAUSED) {
-			pauseandplay.setText("Pause");
+			pauseandplay.setText("Pause Animation");
 			sequentialTransition.play();
 		}
 	}

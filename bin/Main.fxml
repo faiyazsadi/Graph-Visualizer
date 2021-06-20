@@ -4,36 +4,36 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="graph" fx:id="graph" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMousePressed="#onGraphPressed" prefHeight="898.0" prefWidth="1225.0" style="-fx-background-color: #B0C4DE;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<AnchorPane id="graph" fx:id="graph" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMousePressed="#onGraphPressed" prefHeight="898.0" prefWidth="1225.0" style="-fx-background-color: #F0FFFF;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
-      <JFXButton fx:id="setRootButton" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="186.0" onAction="#setRoot" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Set Root" textFill="WHITE">
+      <JFXButton fx:id="setRootButton" buttonType="RAISED" focusTraversable="false" layoutX="461.0" layoutY="22.0" onAction="#setRoot" prefHeight="36.0" prefWidth="134.0" ripplerFill="WHITE" style="-fx-background-color: #1E90FF;" text="Set Root" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="callbfs" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="42.0" onAction="#bfsAnimation" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Run BFS" textFill="WHITE">
+      <JFXButton fx:id="callbfs" buttonType="RAISED" focusTraversable="false" layoutX="153.0" layoutY="22.0" onAction="#bfsAnimation" prefHeight="36.0" prefWidth="134.0" ripplerFill="WHITE" style="-fx-background-color: #1E90FF;" text="Run BFS" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="calldfs" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="90.0" onAction="#callDFS" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Run DFS" textFill="WHITE">
+      <JFXButton fx:id="calldfs" buttonType="RAISED" focusTraversable="false" layoutX="307.0" layoutY="22.0" onAction="#callDFS" prefHeight="36.0" prefWidth="134.0" ripplerFill="WHITE" style="-fx-background-color: #1E90FF;" text="Run DFS" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="reset" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="233.0" onAction="#resetAnimation" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Reset Animation" textFill="WHITE">
+      <JFXButton fx:id="reset" buttonType="RAISED" focusTraversable="false" layoutX="771.0" layoutY="22.0" onAction="#resetAnimation" prefHeight="36.0" prefWidth="134.0" ripplerFill="WHITE" style="-fx-background-color: #1E90FF;" text="Reset Animation" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="pauseandplay" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="138.0" onAction="#pauseAndplayAnimation" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Pause" textFill="WHITE">
+      <JFXButton fx:id="pauseandplay" buttonType="RAISED" focusTraversable="false" layoutX="616.0" layoutY="22.0" onAction="#pauseAndplayAnimation" prefHeight="36.0" prefWidth="134.0" ripplerFill="WHITE" style="-fx-background-color: #1E90FF;" text="Pause Animation" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="clear" buttonType="RAISED" focusTraversable="false" layoutX="1082.0" layoutY="282.0" onAction="#clear" prefHeight="36.0" prefWidth="122.0" ripplerFill="WHITE" style="-fx-background-color: #4169E1;" text="Clear Graph" textFill="WHITE">
+      <JFXButton fx:id="clear" buttonType="RAISED" focusTraversable="false" layoutX="927.0" layoutY="22.0" onAction="#clear" prefHeight="36.0" prefWidth="134.0" ripplerFill="WHITE" style="-fx-background-color: #1E90FF;" text="Clear Graph" textFill="WHITE">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
    </children>
