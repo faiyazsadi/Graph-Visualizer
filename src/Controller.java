@@ -332,8 +332,9 @@ public class Controller {
 	public void animationFinished(String algo) {
 	// put jfoenix dialog here	
 		StackPane stackpane = new StackPane();
-		stackpane.setTranslateX(450);
-		stackpane.setTranslateY(200);
+		
+		stackpane.setTranslateX(600);
+		stackpane.setTranslateY(300);
 
 		JFXDialogLayout content = new JFXDialogLayout();
 
@@ -347,7 +348,7 @@ public class Controller {
 		body.setFill(Color.BLACK);
 		body.setStyle("-fx-font: 16 Roboto_Mono");
 		content.setBody(body);
-		content.setStyle("-fx-background-color:  white;");
+		content.getStyleClass().add("jfx-dialog-overlay-pane");
 
 		JFXDialog dialog = new JFXDialog(stackpane, content, JFXDialog.DialogTransition.CENTER);
 		dialog.setPrefSize(40, 5);
@@ -423,7 +424,7 @@ public class Controller {
 		vertexList.clear();
 		edgeList.clear();
 		graph.getChildren().clear();
-		pauseandplay.setText("Pause");
+		pauseandplay.setText("Pause Animation");
 		graph.getChildren().addAll(pauseandplay, callbfs, calldfs, reset, clear, setRootButton);
 	}
 
@@ -484,14 +485,16 @@ public class Controller {
 
 	public void showErrorDialog() {
 		StackPane stackpane = new StackPane();
-		stackpane.setLayoutX(350);
-		stackpane.setLayoutY(300);
+		stackpane.setTranslateX(600);
+		stackpane.setTranslateY(300);
 		System.out.println("New Root is not present in the Graph");
 		JFXDialogLayout content = new JFXDialogLayout();
-		content.setStyle("-fx-background-color: royalblue;");
+
+		content.setStyle("-fx-background-color: white;");
+		content.getStyleClass().add("jfx-dialog-overlay-pane");
 		Text heading = new Text("Node Not Found!");
-		heading.setFill(Color.WHITE);
-		heading.setStyle("-fx-font: 24 Roboto");
+		heading.setFill(Color.BLACK);
+		heading.setFont(Font.font("Roboto", FontWeight.BOLD, 24));
 		content.setHeading(heading);
 		
 		StringBuilder availableNodes = new StringBuilder();
@@ -508,20 +511,23 @@ public class Controller {
 		System.out.println(availableNodes);
 		
 		Text body = new Text("Choose one of these Nodes " + availableNodes.toString());
-		body.setFill(Color.WHITE);
-		body.setStyle("-fx-font: 20 Roboto;");
+		body.setFill(Color.BLACK);
+		body.setFont(Font.font("Roboto", FontWeight.NORMAL, 20));
 		content.setBody(body);
 		JFXDialog dialog = new JFXDialog(stackpane, content, JFXDialog.DialogTransition.CENTER);
+		dialog.setPrefSize(100, 100);
 		JFXButton button = new JFXButton();
 		button.setText("Okay");
-		button.setTextFill(Color.BLACK);
-		button.setStyle("-fx-background-color: white;");
-
+		button.setFont(Font.font("Roboto", FontWeight.BOLD, 14));
+		button.setTextFill(Color.WHITE);
+		button.setFocusTraversable(false);
+		button.setStyle("-fx-background-color: #1E90FF;");
 		button.setOnAction(event -> {
 			dialog.close();
 			setRootButton.setDisable(false);
 			setRoot();
 		});
+
 		content.setActions(button);
 		dialog.show();
 		graph.getChildren().add(stackpane);

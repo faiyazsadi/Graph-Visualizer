@@ -1,3 +1,5 @@
+import java.util.concurrent.ScheduledExecutorService;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +15,7 @@ public class Main extends Application {
 		Parent root = loader.load();
 		Scene scene = new Scene(root);
 		Stage stage = new Stage();
+		scene.getStylesheets().add("application.css");
 		stage.setScene(scene);
 		stage.getIcons().add(new Image(Main.class.getResourceAsStream("icon.png")));
 		stage.show();	
