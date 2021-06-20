@@ -88,8 +88,7 @@ public class Controller {
 	
 	public void onGraphPressed(MouseEvent mouseEvent) {
 		if(mouseEvent.isPrimaryButtonDown()) {
-			addVertex(mouseEvent);
-		}
+			addVertex(mouseEvent); }
 	}
 
 	public void addVertex(MouseEvent mouseEvent) {
@@ -102,7 +101,7 @@ public class Controller {
         
         
         Text text = new Text(String.valueOf(vertexCount));
-        text.setFill(Color.WHITE);
+        text.setFill(Color.BLACK);
         //text.toFront();
         
         StackPane pane = new StackPane();
