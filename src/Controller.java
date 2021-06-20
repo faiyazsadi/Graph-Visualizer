@@ -2,6 +2,7 @@ import java.nio.BufferUnderflowException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Queue;
@@ -37,6 +38,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 import java.util.Set;
 
@@ -63,6 +65,7 @@ public class Controller {
 	int root;
 	Vertex[] vertexs;
 	Edge[][] edges;
+	HashMap<Edge, Pair<Integer, Integer>> EdgeMap;
 	Set<Integer> nodes;
 
 	int  clickCount = 0, vertex1ID, vertex2ID;
@@ -88,6 +91,7 @@ public class Controller {
 		edges  = new Edge[100][100];
 		discover = new boolean[100];
 		nodes = new HashSet<>();
+		EdgeMap = new HashMap<>();
 	}
 	
 	public void onGraphPressed(MouseEvent mouseEvent) {
@@ -136,7 +140,7 @@ public class Controller {
         		else if(clickCount == 1) {
         			vertex2ID = vertex.ID;
         			stackPane2 = (StackPane) vertex.getParent();
-        			Edge edge = new Edge(stackPane1, stackPane2, graph, edges, vertex1ID, vertex2ID);
+        			Edge edge = new Edge(stackPane1, stackPane2, graph, edges, vertex1ID, vertex2ID, EdgeMap);
         			edgeList.add(edge);
         			clickCount = 0;
         			// this two vertex will have a edge in between
@@ -149,8 +153,12 @@ public class Controller {
         				// this removes an edge from the canvas.
         				if(edgeEvent.isAltDown() && edgeEvent.isSecondaryButtonDown()) {
         					graph.getChildren().remove(edge);
-        					int u = vertex1ID;
-        					int v = vertex2ID;
+        					Pair<Integer, Integer> pair = EdgeMap.get(edge);
+        					
+        					int u = pair.getKey();
+
+        					int v = pair.getValue();
+
         					edges[u][v] = null;
         					edges[v][u] = null; 
         					for(int i = 0; i < adj[u].size(); ++i) {
@@ -163,6 +171,7 @@ public class Controller {
         							adj[v].remove(i);
         						}
         					}
+        					EdgeMap.remove(edge);
         					printGraph();
         				}
         			});
@@ -420,6 +429,7 @@ public class Controller {
 				edges[i][j] = null;
 			}
 		}
+		EdgeMap.clear();
 		nodes.clear();
 		vertexList.clear();
 		edgeList.clear();

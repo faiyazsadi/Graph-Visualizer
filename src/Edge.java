@@ -1,10 +1,13 @@
+import java.util.HashMap;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.util.Pair;
 
 public class Edge extends Line {
-	public Edge(StackPane spane1, StackPane spane2, AnchorPane graph, Edge[][] edges, int u, int v) {
+	public Edge(StackPane spane1, StackPane spane2, AnchorPane graph, Edge[][] edges, int u, int v, HashMap<Edge, Pair<Integer, Integer>> EdgeMap) {
 		//getStyleClass().add("Edge");
 //        startXProperty().bind(vertex1.centerXProperty().add(vertex1.translateXProperty()));
 //        startYProperty().bind(vertex1.centerYProperty().add(vertex1.translateYProperty()));
@@ -19,6 +22,7 @@ public class Edge extends Line {
         setStroke(Color.SKYBLUE);
         edges[u][v] = this;
         edges[v][u] = this; 
+        EdgeMap.put(this, new Pair(u, v));
         graph.getChildren().add(this);
         toBack();
 	}
